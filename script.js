@@ -3,6 +3,20 @@ const COUT_ACHAT_COMPTE = 6200;
 // REMPLACE ICI PAR TON URL DE DÉPLOIEMENT GOOGLE SHEETS
 const URL_GOOGLE_SHEETS = "https://script.google.com/macros/s/AKfycbzPyiA9YoisdFt5wTGvsEcmlgEP0fg63fNYdgLJi4dVzlcTsM-Qvlmw2B-j2eO00zD41g/exec";
 
+// --- LOGIQUE DES TARIFS CORRIGÉE ---
+function calculerPrix(diffM) {
+    if (diffM >= 12) return 14500;
+    if (diffM >= 9) return 13000;
+    if (diffM >= 8) return 11500;
+    if (diffM >= 7) return 10000;
+    if (diffM >= 6) return 8500;
+    if (diffM >= 5) return 7000;
+    if (diffM >= 4) return 5500;
+    if (diffM >= 3) return 4000;
+    if (diffM >= 2) return 2500;
+    return 1500; // Tarif pour 1 mois
+}
+
 let currentData = localStorage.getItem('papi_db') || "amflixen@gmail.com\nProfil 1 ———-»2 (10 et 15 mai)";
 let paiementsValides = JSON.parse(localStorage.getItem('papi_paiements')) || {};
 let etatsTV = JSON.parse(localStorage.getItem('papi_tv')) || {};
@@ -70,9 +84,8 @@ function showStats() {
                             const idUnique = `${block.email}-${lineIdx}-${pIdx}-${dIdx}`;
                             if (paiementsValides[idUnique]) {
                                 const maintenant = new Date();
-                                const diffM = Math.max(1, (dateExp.getFullYear() - maintenant.getFullYear()) * 12 + (dateExp.getMonth() - maintenant.getMonth()));
-                                let prix = (diffM >= 12) ? 14500 : (diffM >= 6) ? 8500 : (diffM >= 3) ? 4000 : 1500 * diffM;
-                                totalCA += Math.round(prix * (nbLigne / (matchParentheses.length * dates.length)));
+                               const m = Math.max(1, (dateExp.getFullYear() - maintenant.getFullYear()) * 12 + (dateExp.getMonth() - maintenant.getMonth()));
+                               totalCA += Math.round(calculerPrix(m) * (nbLigne / (matchParentheses.length * dates.length)));
                             }
                         });
                     });
@@ -146,7 +159,7 @@ function render(filter = "") {
                         if (dDays <= 0) { status = "Terminé ❌"; couleur = "#ff4d4d"; }
                         else if (dDays <= 10) couleur = "#ffcc00";
                         if (estPaye && dDays > 0) {
-                            let prix = (m >= 12) ? 14500 : (m >= 6) ? 8500 : (m >= 3) ? 4000 : 1500 * m;
+                            let prix = calculerPrix(m);
                             gainLigneTotal += prix * (nbPersLigne / (matchParentheses.length * dates.length));
                         }
                         badgesHtml += `<div style="display:flex; align-items:center; margin-left:8px;"><span style="font-size:9px; color:${couleur}; background:#111; padding:2px 5px; border-radius:10px 0 0 10px; font-weight:bold; border:${border}; border-right:none;">${status}</span><span onclick="togglePaye('${idUnique}')" style="cursor:pointer; font-size:14px; color:${estPaye ? "#ffcc00" : "#555"}; background:#111; padding:0px 5px; border-radius:0 10px 10px 0; border:${border}; border-left:1px solid #333; line-height:18px;">${estPaye ? '★' : '☆'}</span></div>`;
