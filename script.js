@@ -185,7 +185,7 @@ function render(filter = "") {
             <div style="padding:10px; background:#222; display:flex; justify-content:space-between; align-items:center;">
                 <div style="display:flex; align-items:center; gap:8px;">
                     <span style="color:#4da6ff; font-weight:bold;">${b.email}</span>
-                    <button onclick="toggleTV('${b.email}')" style="background:${b.hasTV ? '#4da6ff' : '#333'}; color:white; border:none; border-radius:4px; font-size:10px; padding:2px 6px; cursor:pointer; font-weight:bold;">${b.hasTV ? '📺 TV' : '📱 MOB'}</button>
+                    <button onclick="toggleTV('${b.email}')" style="background:${b.hasTV ? '#4da6ff' : '#333'}; color:white; border:none; border-radius:4px; font-size:10px; padding:2px 6px; cursor:pointer; font-weight:bold;">${b.hasTV ? '📺 TV' : 'NO ❌'}</button>
                 </div>
                 <span style="font-size:10px; color:#888;">${b.totalUsers} pers.</span>
             </div>
